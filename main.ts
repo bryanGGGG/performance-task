@@ -1,6 +1,21 @@
-function Spawning (num: number) {
-	
+scene.onOverlapTile(SpriteKind.Enemy, assets.tile`myTile`, function (sprite, location) {
+    statusbar.value += -1
+    sprites.destroy(Bugs)
+})
+function Spawning () {
+    spawn = tiles.getTilesByType(sprites.castle.tilePath2)
+    for (let index = 0; index < 1; index++) {
+        Bugs = sprites.create(Bug._pickRandom(), SpriteKind.Enemy)
+        tiles.placeOnTile(Bugs, tiles.getTileLocation(4, 0))
+    }
+    goal = scene.aStar(tiles.getTileLocation(4, 0), tiles.getTileLocation(14, 19))
+    scene.followPath(Bugs, goal)
 }
+let goal: tiles.Location[] = []
+let spawn: tiles.Location[] = []
+let Bugs: Sprite = null
+let statusbar: StatusBarSprite = null
+let Bug: Image[] = []
 tiles.setCurrentTilemap(tilemap`level1`)
 let Bird = sprites.create(img`
     . . . . . . . . . b 5 b . . . . 
@@ -22,7 +37,7 @@ let Bird = sprites.create(img`
     `, SpriteKind.Player)
 scene.cameraFollowSprite(Bird)
 controller.moveSprite(Bird)
-let Bug = [
+Bug = [
 img`
     . . . . . f f f f f . . . . . . 
     . . . . f e e e e e f . . . . . 
@@ -94,6 +109,9 @@ img`
     . f f . . f f . . f f . . . 
     `
 ]
-tiles.setTileAt(tiles.getTileLocation(3, 0), sprites.castle.tilePath5)
-tiles.setTileAt(tiles.getTileLocation(4, 0), sprites.castle.tilePath5)
-tiles.setTileAt(tiles.getTileLocation(5, 0), sprites.castle.tilePath5)
+statusbar = statusbars.create(20, 4, StatusBarKind.Health)
+statusbar.attachToSprite(Bird)
+statusbar.value = 100
+game.onUpdateInterval(1000, function () {
+    Spawning()
+})
