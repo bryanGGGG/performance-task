@@ -1,0 +1,46 @@
+// Auto-generated code. Do not edit.
+namespace myImages {
+
+    helpers._registerFactory("image", function(name: string) {
+        switch(helpers.stringTrim(name)) {
+            case "E_A~zEe_s?7nH7Z0oW9Y":
+            case "Gunner":return img`
+..................
+..................
+...fffff..........
+..faaaaaff........
+.faaaaaaaaf.......
+faa22222222f......
+faa22222222f......
+faaaa22222acff....
+ffbaaabfbafcccf...
+ffbfbfbfbfbcccf...
+fcc88fbbbf88c6fff.
+fcc888888888666b6f
+fbb888888886666b6f
+ffbb88888bbf66fff.
+.fbcb88bbbf.ff....
+.ffccbbbccf.......
+..fccfffccf.......
+..fccf.fccf.......
+`;
+        }
+        return null;
+    })
+
+    helpers._registerFactory("animation", function(name: string) {
+        switch(helpers.stringTrim(name)) {
+
+        }
+        return null;
+    })
+
+    helpers._registerFactory("song", function(name: string) {
+        switch(helpers.stringTrim(name)) {
+
+        }
+        return null;
+    })
+
+}
+// Auto-generated code. Do not edit.
