@@ -5,44 +5,11 @@ function RemoveSprites () {
     tiles.setCurrentTilemap(tilemap`level1`)
 }
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
-    statusbar.value += -2
-    sprites.destroy(BadGuy)
+    statusbar.value += 0 - statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value
+    sprites.destroy(sprite)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Shoot()
-})
-function SetDifficulty () {
-    if (Difficulty == 1) {
-    	
-    }
-    if (Difficulty == 2) {
-    	
-    }
-    if (Difficulty == 3) {
-    	
-    }
-    if (Difficulty == 4) {
-    	
-    }
-    if (Difficulty == 5) {
-    	
-    }
-    if (Difficulty == 6) {
-        game.gameOver(false)
-    }
-    if (Difficulty == 7) {
-        game.gameOver(false)
-    }
-    if (Difficulty == 8) {
-        game.gameOver(false)
-    }
-    if (Difficulty == 9) {
-        game.gameOver(false)
-    }
-}
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
-    EnemyBar.value += -10
-    sprites.destroy(GunnerBullet)
 })
 function CharacterSelection () {
     scene.setBackgroundImage(img`
@@ -191,22 +158,24 @@ function CharacterSelection () {
         `, SpriteKind.Player)
     Gunner.setPosition(33, 102)
     Mage = sprites.create(img`
-        . . . . . . . c c c . . . . . . 
-        . . . . . . c f 2 c . . . . . . 
-        . . . . c c c 2 2 c c c . . . . 
-        . . c c f c 2 2 f 2 c c c c . . 
-        . c f f 2 f 2 f 2 2 f 2 f f c . 
-        . c f f 2 f f 2 2 f f 2 f f c . 
-        . . f 2 f 2 f f f f 2 f 2 c . . 
-        . . f f 2 2 2 2 2 2 2 2 f f . . 
-        . . f f f b f e e f b f f f . . 
-        . . f f f 1 f e e f 1 f f f . . 
-        . . . f f e e e e e e f f . . . 
-        . . . e e f e e e e f e e . . . 
-        . . e f c f 2 f f 2 f f f e . . 
-        . . e e f 2 2 2 2 2 2 f e e . . 
-        . . . . c f 2 2 2 2 f c . . . . 
-        . . . . . f f f f f f . . . . . 
+        ..................
+        ........fff.......
+        .......fc2cf......
+        .....ffcf22ff.....
+        ...ffcc2222ccff...
+        ..fccf222f22cccf..
+        .fcff2f2f22f2ffcf.
+        .fcff2ff22ff2ffcf.
+        ..fc2f2ffff222cf..
+        ..fee22222222eef..
+        ..feee1fddf1eeef..
+        ..feee1fddf1eeef..
+        ...feeddddddeef...
+        ...fddf2ff2fddf...
+        ..fdfcf2222fffdf..
+        ..fddf222222fddf..
+        ...ffcf2222fcff...
+        .....ffffffff.....
         `, SpriteKind.Player)
     Mage.setPosition(83, 102)
     SwordFighter = sprites.create(img`
@@ -274,22 +243,24 @@ function CharacterSelection () {
         ....fccf.fccf.......
         `,
     img`
-        . . . . . . . c c c . . . . . . 
-        . . . . . . c b 2 c . . . . . . 
-        . . . . c c c 2 2 c c c . . . . 
-        . . c c b c 2 2 2 2 c c c c . . 
-        . c b b 2 b 2 2 2 2 b 2 b b c . 
-        . c b 2 2 b b 2 2 b b 2 2 b c . 
-        . . f 2 2 2 b b b b 2 2 2 c . . 
-        . . f f 2 2 2 2 2 2 2 2 f f . . 
-        . . f f f b f e e f b f f f . . 
-        . . f f f 1 f b b f 1 f f f . . 
-        . . . f f b b b b b b f f . . . 
-        . . . e e f e e e e f e e . . . 
-        . . e b c b 2 b b 2 b f b e . . 
-        . . e e f 2 2 2 2 2 2 f e e . . 
-        . . . . c b 2 2 2 2 b c . . . . 
-        . . . . . f f f f f f . . . . . 
+        ..................
+        ........fff.......
+        .......fc2cf......
+        .....ffcf22ff.....
+        ...ffcc2222ccff...
+        ..fccf222f22cccf..
+        .fcff2f2f22f2ffcf.
+        .fcff2ff22ff2ffcf.
+        ..fc2f2ffff222cf..
+        ..fee22222222eef..
+        ..feee1fddf1eeef..
+        ..feee1fddf1eeef..
+        ...feeddddddeef...
+        ...fddf2ff2fddf...
+        ..fdfcf2222fffdf..
+        ..fddf222222fddf..
+        ...ffcf2222fcff...
+        .....ffffffff.....
         `,
     img`
         ..................
@@ -314,9 +285,6 @@ function CharacterSelection () {
     ]
     FighterChoice = game.askForNumber("", 1)
 }
-statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
-    sprites.destroy(BadGuy)
-})
 function Shoot () {
     if (Gunner) {
         BulletSpeed = 50
@@ -343,7 +311,6 @@ function Shoot () {
     }
 }
 statusbars.onZero(StatusBarKind.Health, function (status) {
-    sprites.destroy(ThePlayer)
     game.gameOver(false)
 })
 function Spawning (HP: number, speed: number) {
@@ -356,22 +323,48 @@ function Spawning (HP: number, speed: number) {
     scene.followPath(BadGuy, goal, speed)
     EnemyBar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
     EnemyBar.attachToSprite(BadGuy)
-    statusbar.value = HP
+    EnemyBar.max = HP
+    EnemyBar.value = HP
     if (info.score() == 10) {
-        EnemyBar.value += 50
+        EnemyBar.value += 2
         BadGuy.setVelocity(speed + 20, speed + 20)
     }
 }
-sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
-    info.changeScoreBy(1)
+function Waves () {
+    timer.after(1000, function () {
+        for (let index = 0; index < 20; index++) {
+            pause(1000)
+            Spawning(10, 20)
+        }
+        timer.after(10000, function () {
+            for (let index = 0; index < 40; index++) {
+                pause(1000)
+                Spawning(8, 25)
+            }
+            timer.after(20000, function () {
+                for (let index = 0; index < 80; index++) {
+                    pause(2000)
+                    Spawning(5, 35)
+                }
+            })
+        })
+    })
+}
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(sprite)
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
+    if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
+        info.changeScoreBy(1)
+        sprites.destroy(otherSprite)
+    }
 })
+let EnemyBar: StatusBarSprite = null
 let goal: tiles.Location[] = []
 let spawn: tiles.Location[] = []
-let BulletDestination = 0
-let BulletSpeed = 0
-let GunnerBullet: Sprite = null
-let EnemyBar: StatusBarSprite = null
 let BadGuy: Sprite = null
+let BulletDestination = 0
+let GunnerBullet: Sprite = null
+let BulletSpeed = 0
 let SwordFighter: Sprite = null
 let Mage: Sprite = null
 let Gunner: Sprite = null
@@ -380,7 +373,6 @@ let FighterChoice = 0
 let CharacterList: Image[] = []
 let ThePlayer: Sprite = null
 let BadGuys: Image[] = []
-let Difficulty = 0
 scene.setBackgroundImage(img`
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
@@ -506,26 +498,24 @@ scene.setBackgroundImage(img`
 game.showLongText("Between gunner, mage or Swordfighter", DialogLayout.Bottom)
 CharacterSelection()
 RemoveSprites()
-Difficulty = game.askForNumber("choose difficulty 1-5", 1)
-SetDifficulty()
 BadGuys = [
 img`
-    . . . . . f f f f f . . . . . . 
-    . . . . f e e e e e f . . . . . 
-    . . . f d d d d d e e f . . . . 
-    . . f f f d d f f d e f f . . . 
-    . c d d e e d d d d e d d f . . 
-    . c c d d d d c d d e d f f f . 
-    . c d c c c c d d d e d f b d f 
-    . . c d d d d d d e e f f d d f 
-    . . . c d d d d e e f f e f f f 
-    . . . . f f f e e f e e e f . . 
-    . . . . f e e e e e e e f f f . 
-    . . . f e e e e e e f f f e f . 
-    . . f f e e e e f f f f f e f . 
-    . f b d f e e f b b f f f e f . 
-    . f d d f e e f d d b f f f f . 
-    . f f f f f f f f f f f f f . . 
+    . . . . . f . . . . f . . . . . 
+    . . . . . f . . . . f . . . . . 
+    . . . . . f . . . . f . . . . . 
+    . . . . . f f f f f f . . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . . f . . . . . . f . . . . 
+    . . . f f f f . . f f f f . . . 
+    . . . f . f . f f . f . f . . . 
+    . . . f . f . . . . f . f . . . 
+    . . . f . f . . . . f . f . . . 
+    . . f f f f . . . . f f f f . . 
     `,
 img`
     4 4 4 . . 4 4 4 4 4 . . . . . . 
@@ -589,6 +579,4 @@ statusbar.setColor(8, 10)
 statusbar.attachToSprite(ThePlayer)
 statusbar.value = 100
 info.setScore(0)
-game.onUpdateInterval(1000, function () {
-    Spawning(randint(100, 150), randint(45, 50))
-})
+Waves()
