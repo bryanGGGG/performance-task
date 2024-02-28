@@ -30,6 +30,10 @@ function SetDifficulty (Difficulty: number) {
     	
     }
 }
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
+    EnemyBar.value += -10
+    sprites.destroy(GunnerBullet)
+})
 function CharacterSelection () {
     scene.setBackgroundImage(img`
         1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -154,60 +158,66 @@ function CharacterSelection () {
         1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
         `)
     Gunner = sprites.create(img`
-        . . . . f f f f . . . . . 
-        . . f f f f f f f f . . . 
-        . f f f f f f c f f f . . 
-        f f f f f f c c f f f c . 
-        f f f c f f f f f f f c . 
-        c c c f f f e e f f c c . 
-        f f f f f e e f f c c f . 
-        f f f b f e e f b f f f . 
-        . f 4 1 f 4 4 f 1 4 f . . 
-        . f e 4 4 4 4 4 4 e f . . 
-        . f f f e e e e f f f . . 
-        f e f b 7 7 7 7 b f e f . 
-        e 4 f 7 7 7 7 7 7 f 4 e . 
-        e e f 6 6 6 6 6 6 f e e . 
-        . . . f f f f f f . . . . 
-        . . . f f . . f f . . . . 
+        ....................
+        ....................
+        ....................
+        ....................
+        .....fffff..........
+        ....faaaaaff........
+        ...faaaaaaaaf.......
+        ..faa22222222f......
+        ..faa22222222f......
+        ..faaaa22222ccff....
+        ..ffbaaabfbcfcccf...
+        ..ffbfbfbfbfbcccf...
+        ..f8888fbbbf8cc6fff.
+        ..f88888888888666b6f
+        ..fbb888888886666b6f
+        ..ffbb88888bbf66fff.
+        ...fbcb88bbbf.ff....
+        ...ffccbbbccf.......
+        ....fccfffccf.......
+        ....fccf.fccf.......
         `, SpriteKind.Player)
     Gunner.setPosition(33, 102)
     Mage = sprites.create(img`
         . . . . . . . c c c . . . . . . 
-        . . . . . . c b 5 c . . . . . . 
-        . . . . c c c 5 5 c c c . . . . 
-        . . c c b c 5 5 5 5 c c c c . . 
-        . c b b 5 b 5 5 5 5 b 5 b b c . 
-        . c b 5 5 b b 5 5 b b 5 5 b c . 
-        . . f 5 5 5 b b b b 5 5 5 c . . 
-        . . f f 5 5 5 5 5 5 5 5 f f . . 
+        . . . . . . c f 2 c . . . . . . 
+        . . . . c c c 2 2 c c c . . . . 
+        . . c c f c 2 2 f 2 c c c c . . 
+        . c f f 2 f 2 f 2 2 f 2 f f c . 
+        . c f f 2 f f 2 2 f f 2 f f c . 
+        . . f 2 f 2 f f f f 2 f 2 c . . 
+        . . f f 2 2 2 2 2 2 2 2 f f . . 
         . . f f f b f e e f b f f f . . 
-        . . f f f 1 f b b f 1 f f f . . 
-        . . . f f b b b b b b f f . . . 
+        . . f f f 1 f e e f 1 f f f . . 
+        . . . f f e e e e e e f f . . . 
         . . . e e f e e e e f e e . . . 
-        . . e b c b 5 b b 5 b f b e . . 
-        . . e e f 5 5 5 5 5 5 f e e . . 
-        . . . . c b 5 5 5 5 b c . . . . 
+        . . e f c f 2 f f 2 f f f e . . 
+        . . e e f 2 2 2 2 2 2 f e e . . 
+        . . . . c f 2 2 2 2 f c . . . . 
         . . . . . f f f f f f . . . . . 
         `, SpriteKind.Player)
     Mage.setPosition(83, 102)
     SwordFighter = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . . f e 4 d d d d 4 e f e . . 
-        . . f e f 2 2 2 2 e d d 4 e . . 
-        . . e 4 f 2 2 2 2 e d d e . . . 
-        . . . . f 4 4 5 5 f e e . . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . f f f . . . . . . . . . 
+        ..................
+        ..................
+        ..................
+        ....fff.......f...
+        ...f868fffffff1f..
+        ..f866f1bbbbff1f..
+        ..866ffb1111bf1f..
+        ..f6f.fbbbffff1f..
+        ...f..fbbbffff1f..
+        ......ffbbbbbf1f..
+        ..ffffffffffff1f..
+        .f11668fbbbbf888f.
+        .f16688fbbbbbfff..
+        .f66668fbbbb11f...
+        .f66688fbbbb11f...
+        ..f688fffff6ff....
+        ...f8ff...f66f....
+        ...ffff...ffff....
         `, SpriteKind.Player)
     SwordFighter.setPosition(130, 102)
     game.showLongText("Enter number for fighter", DialogLayout.Top)
@@ -232,110 +242,100 @@ function CharacterSelection () {
         . . . . . . . . . . . . . 
         `,
     img`
-        . . . . f f f f . . . . . 
-        . . f f f f f f f f . . . 
-        . f f f f f f c f f f . . 
-        f f f f f f c c f f f c . 
-        f f f c f f f f f f f c . 
-        c c c f f f e e f f c c . 
-        f f f f f e e f f c c f . 
-        f f f b f e e f b f f f . 
-        . f 4 1 f 4 4 f 1 4 f . . 
-        . f e 4 4 4 4 4 4 e f . . 
-        . f f f e e e e f f f . . 
-        f e f b 7 7 7 7 b f e f . 
-        e 4 f 7 7 7 7 7 7 f 4 e . 
-        e e f 6 6 6 6 6 6 f e e . 
-        . . . f f f f f f . . . . 
-        . . . f f . . f f . . . . 
+        ....................
+        ....................
+        ....................
+        ....................
+        .....fffff..........
+        ....faaaaaff........
+        ...faaaaaaaaf.......
+        ..faa22222222f......
+        ..faa22222222f......
+        ..faaaa22222ccff....
+        ..ffbaaabfbcfcccf...
+        ..ffbfbfbfbfbcccf...
+        ..f8888fbbbf8cc6fff.
+        ..f88888888888666b6f
+        ..fbb888888886666b6f
+        ..ffbb88888bbf66fff.
+        ...fbcb88bbbf.ff....
+        ...ffccbbbccf.......
+        ....fccfffccf.......
+        ....fccf.fccf.......
         `,
     img`
         . . . . . . . c c c . . . . . . 
-        . . . . . . c b 5 c . . . . . . 
-        . . . . c c c 5 5 c c c . . . . 
-        . . c c b c 5 5 5 5 c c c c . . 
-        . c b b 5 b 5 5 5 5 b 5 b b c . 
-        . c b 5 5 b b 5 5 b b 5 5 b c . 
-        . . f 5 5 5 b b b b 5 5 5 c . . 
-        . . f f 5 5 5 5 5 5 5 5 f f . . 
+        . . . . . . c b 2 c . . . . . . 
+        . . . . c c c 2 2 c c c . . . . 
+        . . c c b c 2 2 2 2 c c c c . . 
+        . c b b 2 b 2 2 2 2 b 2 b b c . 
+        . c b 2 2 b b 2 2 b b 2 2 b c . 
+        . . f 2 2 2 b b b b 2 2 2 c . . 
+        . . f f 2 2 2 2 2 2 2 2 f f . . 
         . . f f f b f e e f b f f f . . 
         . . f f f 1 f b b f 1 f f f . . 
         . . . f f b b b b b b f f . . . 
         . . . e e f e e e e f e e . . . 
-        . . e b c b 5 b b 5 b f b e . . 
-        . . e e f 5 5 5 5 5 5 f e e . . 
-        . . . . c b 5 5 5 5 b c . . . . 
+        . . e b c b 2 b b 2 b f b e . . 
+        . . e e f 2 2 2 2 2 2 f e e . . 
+        . . . . c b 2 2 2 2 b c . . . . 
         . . . . . f f f f f f . . . . . 
         `,
     img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . . f e 4 d d d d 4 e f e . . 
-        . . f e f 2 2 2 2 e d d 4 e . . 
-        . . e 4 f 2 2 2 2 e d d e . . . 
-        . . . . f 4 4 5 5 f e e . . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . f f f . . . . . . . . . 
+        ..................
+        ..................
+        ..................
+        ....fff.......f...
+        ...f868fffffff1f..
+        ..f866f1bbbbff1f..
+        ..866ffb1111bf1f..
+        ..f6f.fbbbffff1f..
+        ...f..fbbbffff1f..
+        ......ffbbbbbf1f..
+        ..ffffffffffff1f..
+        .f11668fbbbbf888f.
+        .f16688fbbbbbfff..
+        .f66668fbbbb11f...
+        .f66688fbbbb11f...
+        ..f688fffff6ff....
+        ...f8ff...f66f....
+        ...ffff...ffff....
         `
     ]
     FighterChoice = game.askForNumber("", 1)
 }
+statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
+    sprites.destroy(BadGuy)
+})
 function Shoot () {
-    if (Gunner || Mage) {
+    if (Gunner) {
         BulletSpeed = 50
-        if (Gunner) {
-            GunnerBullet = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . f f f f . . . 
-                . . . . . . . f f 7 7 7 7 f . . 
-                . . . . f f f 7 7 7 1 1 7 7 f . 
-                . . f f 7 7 7 7 1 1 1 1 1 7 f . 
-                . f 7 7 7 1 1 1 1 1 1 1 1 7 f . 
-                . f 7 1 1 1 1 1 1 1 1 1 1 7 f . 
-                . f 7 7 7 7 7 7 1 1 1 1 1 7 f . 
-                . . f f f f 7 7 7 7 1 1 7 7 f . 
-                . . . . . . f f f 7 7 7 7 f . . 
-                . . . . . . . . . f f f f . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, ThePlayer, BulletSpeed, 0)
-        }
-        if (Mage) {
-            MageAttack = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . f f f . . . . . . 
-                . . . . . . f 4 2 4 f . . . . . 
-                . . . . f f f 4 2 4 5 f f . . . 
-                . . . f 4 4 5 5 5 5 5 4 4 f . . 
-                . . . f 4 5 5 5 1 5 5 5 4 f . . 
-                . . f 5 5 5 5 5 1 5 5 5 5 5 f . 
-                . f 4 4 5 5 5 1 1 1 5 5 5 4 4 f 
-                . f 2 2 5 1 1 1 1 1 1 1 5 2 2 f 
-                . f 4 4 5 5 5 1 1 1 5 5 5 4 4 f 
-                . . f 5 5 5 5 5 1 5 5 5 5 5 f . 
-                . . . f 4 5 5 5 1 5 5 5 4 f . . 
-                . . . f 4 4 5 5 5 5 5 4 4 f . . 
-                . . . . f f 5 4 2 4 5 f f . . . 
-                . . . . . . f 4 2 4 f . . . . . 
-                . . . . . . . f f f . . . . . . 
-                `, ThePlayer, BulletSpeed, 0)
-        }
+        GunnerBullet = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . f f f f . . . 
+            . . . . . . . f f 7 7 7 7 f . . 
+            . . . . f f f 7 7 7 1 1 7 7 f . 
+            . . f f 7 7 7 7 1 1 1 1 1 7 f . 
+            . f 7 7 7 1 1 1 1 1 1 1 1 7 f . 
+            . f 7 1 1 1 1 1 1 1 1 1 1 7 f . 
+            . f 7 7 7 7 7 7 1 1 1 1 1 7 f . 
+            . . f f f f 7 7 7 7 1 1 7 7 f . 
+            . . . . . . f f f 7 7 7 7 f . . 
+            . . . . . . . . . f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, ThePlayer, BulletSpeed, 0)
         BulletDestination = Math.atan2(BadGuy.y - ThePlayer.y, BadGuy.x - ThePlayer.x)
         GunnerBullet.setVelocity(BulletSpeed * Math.cos(BulletDestination), BulletSpeed * Math.sin(BulletDestination))
-        MageAttack.setVelocity(BulletSpeed * Math.cos(BulletDestination), BulletSpeed * Math.sin(BulletDestination))
     }
 }
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    sprites.destroy(ThePlayer)
+    game.gameOver(false)
+})
 function Spawning (HP: number, speed: number) {
     spawn = tiles.getTilesByType(sprites.castle.tilePath2)
     for (let index = 0; index < 1; index++) {
@@ -348,13 +348,12 @@ function Spawning (HP: number, speed: number) {
     EnemyBar.attachToSprite(BadGuy)
     statusbar.value = HP
 }
-let EnemyBar: StatusBarSprite = null
 let goal: tiles.Location[] = []
 let spawn: tiles.Location[] = []
 let BulletDestination = 0
-let MageAttack: Sprite = null
-let GunnerBullet: Sprite = null
 let BulletSpeed = 0
+let GunnerBullet: Sprite = null
+let EnemyBar: StatusBarSprite = null
 let BadGuy: Sprite = null
 let SwordFighter: Sprite = null
 let Mage: Sprite = null
@@ -570,6 +569,6 @@ statusbar = statusbars.create(20, 4, StatusBarKind.Health)
 statusbar.setColor(8, 10)
 statusbar.attachToSprite(ThePlayer)
 statusbar.value = 100
-game.onUpdateInterval(500, function () {
+game.onUpdateInterval(1000, function () {
     Spawning(100, randint(45, 50))
 })
