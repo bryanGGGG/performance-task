@@ -11,11 +11,9 @@ scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Shoot()
 })
-function SetDifficulty (Difficulty: number) {
+function SetDifficulty () {
     if (Difficulty == 1) {
-        while (true) {
-        	
-        }
+    	
     }
     if (Difficulty == 2) {
     	
@@ -28,6 +26,18 @@ function SetDifficulty (Difficulty: number) {
     }
     if (Difficulty == 5) {
     	
+    }
+    if (Difficulty == 6) {
+        game.gameOver(false)
+    }
+    if (Difficulty == 7) {
+        game.gameOver(false)
+    }
+    if (Difficulty == 8) {
+        game.gameOver(false)
+    }
+    if (Difficulty == 9) {
+        game.gameOver(false)
     }
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
@@ -347,7 +357,14 @@ function Spawning (HP: number, speed: number) {
     EnemyBar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
     EnemyBar.attachToSprite(BadGuy)
     statusbar.value = HP
+    if (info.score() == 10) {
+        EnemyBar.value += 50
+        BadGuy.setVelocity(speed + 20, speed + 20)
+    }
 }
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    info.changeScoreBy(1)
+})
 let goal: tiles.Location[] = []
 let spawn: tiles.Location[] = []
 let BulletDestination = 0
@@ -363,6 +380,7 @@ let FighterChoice = 0
 let CharacterList: Image[] = []
 let ThePlayer: Sprite = null
 let BadGuys: Image[] = []
+let Difficulty = 0
 scene.setBackgroundImage(img`
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
@@ -488,7 +506,8 @@ scene.setBackgroundImage(img`
 game.showLongText("Between gunner, mage or Swordfighter", DialogLayout.Bottom)
 CharacterSelection()
 RemoveSprites()
-game.splash(game.askForNumber("choose difficulty 1-5", 1))
+Difficulty = game.askForNumber("choose difficulty 1-5", 1)
+SetDifficulty()
 BadGuys = [
 img`
     . . . . . f f f f f . . . . . . 
@@ -569,6 +588,7 @@ statusbar = statusbars.create(20, 4, StatusBarKind.Health)
 statusbar.setColor(8, 10)
 statusbar.attachToSprite(ThePlayer)
 statusbar.value = 100
+info.setScore(0)
 game.onUpdateInterval(1000, function () {
-    Spawning(100, randint(45, 50))
+    Spawning(randint(100, 150), randint(45, 50))
 })
