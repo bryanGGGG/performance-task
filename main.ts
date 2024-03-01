@@ -358,6 +358,9 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
         sprites.destroy(otherSprite)
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    statusbar.value += -2
+})
 let EnemyBar: StatusBarSprite = null
 let goal: tiles.Location[] = []
 let spawn: tiles.Location[] = []
@@ -500,21 +503,21 @@ CharacterSelection()
 RemoveSprites()
 BadGuys = [
 img`
-    . . . . . f . . . . f . . . . . 
-    . . . . . f . . . . f . . . . . 
-    . . . . . f . . . . f . . . . . 
     . . . . . f f f f f f . . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . . f . . . . . . f . . . . 
-    . . . f f f f . . f f f f . . . 
-    . . . f . f . f f . f . f . . . 
-    . . . f . f . . . . f . f . . . 
-    . . . f . f . . . . f . f . . . 
+    . . . . . f f f f f f . . . . . 
+    . . . . . f f f f f f . . . . . 
+    . . . . . f f f f f f . . . . . 
+    . . f f f f f f f f f f f f . . 
+    . . f . f f f f f f f f . f . . 
+    . . f . f f f f f f f f . f . . 
+    . . f . f f f f f f f f . f . . 
+    . . f . f f f f f f f f . f . . 
+    . . f . f f f f f f f f . f . . 
+    . . . . f f f f f f f f . . . . 
+    . . . f f f f f f f f f f . . . 
+    . . . f f f . . . . f f f . . . 
+    . . . f f f . . . . f f f . . . 
+    . . . f f f . . . . f f f . . . 
     . . f f f f . . . . f f f f . . 
     `,
 img`
