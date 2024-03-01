@@ -18,10 +18,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         Shoot()
     } else if (FighterChoice == 2) {
         if (!(Swinging)) {
-            attack = 1
-            timer.after(500, function () {
-                attack = 0
-            })
             Swinging = true
             Sword.setImage(img`
                 . . . . . . . . . . . . . . . . 
@@ -41,7 +37,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `)
-            pause(200)
+            pause(50)
             Sword.setImage(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -61,6 +57,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 . . . . . . . . . . . . . . . . 
                 `)
             Swinging = false
+            attack = 1
+            timer.after(50, function () {
+                attack = 0
+            })
         }
     }
 })
@@ -296,6 +296,16 @@ function CharacterSelection () {
         `]
     FighterChoice = game.askForNumber("", 1)
 }
+sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (attack == 1) {
+        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+    }
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
+    if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
+        info.changeScoreBy(1)
+        sprites.destroy(otherSprite)
+    }
+})
 function Shoot () {
     if (game.runtime() > lastFireTime + timebetweenfire) {
         if (shootdirection == 1) {
@@ -393,7 +403,7 @@ function Spawning (HP: number, speed: number) {
         BadGuy = sprites.create(BadGuys._pickRandom(), SpriteKind.Enemy)
         tiles.placeOnTile(BadGuy, tiles.getTileLocation(6, 0))
     }
-    goal = scene.aStar(tiles.getTileLocation(6, 0), tiles.getTileLocation(14, 19))
+    goal = scene.aStar(tiles.getTileLocation(6, 0), tiles.getTileLocation(34, 39))
     scene.followPath(BadGuy, goal, speed)
     EnemyBar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
     EnemyBar.attachToSprite(BadGuy)
@@ -406,30 +416,27 @@ function Spawning (HP: number, speed: number) {
 }
 function Waves () {
     timer.after(1000, function () {
-        for (let index = 0; index < 20; index++) {
-            pause(1000)
-            Spawning(10, 20)
+        for (let index = 0; index < 500; index++) {
+            pause(500)
+            Spawning(1000, 40)
         }
         timer.after(10000, function () {
-            for (let index = 0; index < 40; index++) {
+            for (let index = 0; index < 1000; index++) {
                 pause(1000)
-                Spawning(8, 25)
+                Spawning(800, 50)
             }
             timer.after(20000, function () {
-                for (let index = 0; index < 80; index++) {
-                    pause(2000)
-                    Spawning(5, 35)
+                for (let index = 0; index < 2000; index++) {
+                    pause(1000)
+                    Spawning(500, 70)
                 }
             })
         })
     })
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (attack == 1) {
-        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -5
-    }
     sprites.destroy(sprite)
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -400
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -635,7 +642,7 @@ statusbar.value = 100
 info.setScore(0)
 Waves()
 shootdirection = 1
-timebetweenfire = 200
+timebetweenfire = 175
 Sword = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
