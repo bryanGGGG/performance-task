@@ -10,7 +10,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     shootdirection = 3
 })
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
-    statusbar.value += 0 - statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value
+    statusbar.value += -2
     sprites.destroy(sprite)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -416,19 +416,22 @@ function Spawning (HP: number, speed: number) {
 }
 function Waves () {
     timer.after(1000, function () {
-        for (let index = 0; index < 500; index++) {
+        game.splash("wave 1")
+        for (let index = 0; index < 20; index++) {
             pause(500)
-            Spawning(1000, 40)
+            Spawning(1000, 25)
         }
         timer.after(10000, function () {
-            for (let index = 0; index < 1000; index++) {
+            game.splash("wave 2")
+            for (let index = 0; index < 50; index++) {
                 pause(1000)
-                Spawning(800, 50)
+                Spawning(1000, 50)
             }
-            timer.after(20000, function () {
+            timer.after(15000, function () {
+                game.splash("wave 3")
                 for (let index = 0; index < 2000; index++) {
                     pause(1000)
-                    Spawning(500, 70)
+                    Spawning(1000, 100)
                 }
             })
         })
@@ -630,6 +633,27 @@ BadGuys = [img`
     .ff777777bbbbbbbfff.
     ..ff7777bbbbbbbbff..
     ...ffffffffffffff...
+    `, img`
+    ....................
+    ....................
+    ....ff.fffff........
+    ...f33f13333ff......
+    ..f13f11333333f.....
+    ..f133333333333f....
+    ..f33333f33f333f....
+    ..f13333f33f3333f...
+    ..f13333f33f3333bf..
+    ..f333333333333bbf..
+    ...f33333ff33bbbbf..
+    ...f33333ff3bbfff...
+    ...f3333333bbf222f..
+    ....f333333bf2222f..
+    ....ff3333bbf2222f..
+    ...f22ff3bbf2222f...
+    ..f22222fffff22f....
+    ...ffffff...fff.....
+    ....................
+    ....................
     `]
 ThePlayer = sprites.create(CharacterList[FighterChoice], SpriteKind.Player)
 ThePlayer.setPosition(40, 35)
