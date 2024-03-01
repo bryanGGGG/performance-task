@@ -37,7 +37,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `)
-            pause(50)
+            pause(10)
             Sword.setImage(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -295,12 +295,20 @@ function CharacterSelection () {
         ...ffff...ffff....
         `]
     FighterChoice = game.askForNumber("", 1)
+    if (FighterChoice >= 3) {
+        game.splash("WRONG NUMBER")
+        game.gameOver(false)
+    }
+    if (FighterChoice == 0) {
+        game.splash("Nuh uh")
+        game.gameOver(false)
+    }
 }
 sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (attack == 1) {
         statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
     }
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -400
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -419,12 +427,12 @@ function Waves () {
         game.splash("wave 1")
         for (let index = 0; index < 20; index++) {
             pause(500)
-            Spawning(1000, 25)
+            Spawning(1000, 50)
         }
         timer.after(10000, function () {
             game.splash("wave 2")
             for (let index = 0; index < 50; index++) {
-                pause(1000)
+                pause(500)
                 Spawning(1000, 50)
             }
             timer.after(15000, function () {
@@ -439,7 +447,7 @@ function Waves () {
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite)
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -400
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -637,20 +645,20 @@ BadGuys = [img`
     ....................
     ....................
     ....ff.fffff........
-    ...f33f13333ff......
-    ..f13f11333333f.....
-    ..f133333333333f....
-    ..f33333f33f333f....
-    ..f13333f33f3333f...
-    ..f13333f33f3333bf..
-    ..f333333333333bbf..
-    ...f33333ff33bbbbf..
-    ...f33333ff3bbfff...
-    ...f3333333bbf222f..
-    ....f333333bf2222f..
-    ....ff3333bbf2222f..
-    ...f22ff3bbf2222f...
-    ..f22222fffff22f....
+    ...f44f14444ff......
+    ..f14f11444444f.....
+    ..f144444444444f....
+    ..f44441f44f144f....
+    ..f14441f44f1444f...
+    ..f14441f44f1444bf..
+    ..f444444444444bbf..
+    ...f44444ff44bbbbf..
+    ...f444442f4bbfff...
+    ...f4444444bbf777f..
+    ....f444444bf7777f..
+    ....ff4444bbf7777f..
+    ...f77ff4bbf7777f...
+    ..f77777fffff77f....
     ...ffffff...fff.....
     ....................
     ....................
