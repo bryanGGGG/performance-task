@@ -1,6 +1,16 @@
 namespace SpriteKind {
     export const projectile2 = SpriteKind.create()
+    export const Turret1 = SpriteKind.create()
+    export const TurretShoot = SpriteKind.create()
 }
+/**
+ * pathfinding extension
+ * 
+ * https://github.com/jwunderl/arcade-tilemap-a-star
+ */
+/**
+ * status bar and timer extension found in extensions tab in makecode arcade
+ */
 function RemoveSprites () {
     sprites.destroy(Gunner)
     sprites.destroy(SwordFighter)
@@ -12,6 +22,31 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
     statusbar.value += -2
     sprites.destroy(sprite)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (info.score() >= 10) {
+        info.changeScoreBy(-10)
+        Turret = sprites.create(img`
+            f f . . . . . . . . . . . . f f 
+            f 8 f . . . . . . . . . . f 8 f 
+            . f 8 f . . . . . . . . f 8 f . 
+            . . f 8 f f f f f f f f 8 f . . 
+            . . . f 8 c c c c c c 8 f . . . 
+            . . . f c c c c c c c c f . . . 
+            . . . f c c f b b b f c f . . . 
+            . . . f c c f f f f f c f . . . 
+            . . . f c c f 2 c c c c f . . . 
+            . . . f c c f f c c c c f . . . 
+            . . . f c c c c c c c c f . . . 
+            . . . f 8 c c c c c c 8 f . . . 
+            . . f 8 f f f f f f f f 8 f . . 
+            . f 8 f . . . . . . . . f 8 f . 
+            f 8 f . . . . . . . . . . f 8 f 
+            f f . . . . . . . . . . . . f f 
+            `, SpriteKind.Turret1)
+        Turret.setPosition(ThePlayer.x, ThePlayer.y)
+        Turret.lifespan = 10000
+    }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (FighterChoice == 1) {
@@ -308,7 +343,7 @@ sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, ot
     if (attack == 1) {
         statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
     }
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -400
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -600
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -425,33 +460,48 @@ function Spawning (HP: number, speed: number) {
 function Waves () {
     timer.after(1000, function () {
         game.splash("wave 1")
-        for (let index = 0; index < 20; index++) {
+        for (let index = 0; index < 10; index++) {
             pause(500)
             Spawning(850, 35)
         }
         timer.after(10000, function () {
             game.splash("wave 2")
-            for (let index = 0; index < 50; index++) {
+            for (let index = 0; index < 25; index++) {
                 pause(500)
                 Spawning(randint(900, 950), 38)
             }
             timer.after(15000, function () {
                 game.splash("wave 3")
-                for (let index = 0; index < 100; index++) {
+                for (let index = 0; index < 50; index++) {
                     pause(1000)
                     Spawning(randint(950, 1000), 40)
                 }
                 timer.after(15000, function () {
                     game.splash("wave 4")
-                    for (let index = 0; index < 200; index++) {
+                    for (let index = 0; index < 100; index++) {
                         pause(1000)
                         Spawning(1000, 45)
                     }
+                    timer.after(20000, function () {
+                        game.splash("Final Wave")
+                        for (let index = 0; index < 5000; index++) {
+                            pause(1000)
+                            Spawning(2000, 50)
+                        }
+                    })
                 })
             })
         })
     })
 }
+sprites.onOverlap(SpriteKind.TurretShoot, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(sprite)
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
+    if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
+        info.changeScoreBy(1)
+        sprites.destroy(otherSprite)
+    }
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite)
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -460
@@ -463,6 +513,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     statusbar.value += -2
 })
+let TurretProjectile: Sprite = null
 let goal2: tiles.Location[] = []
 let EnemyBar: StatusBarSprite = null
 let goal: tiles.Location[] = []
@@ -472,6 +523,7 @@ let GunnerBullet: Sprite = null
 let lastFireTime = 0
 let attack = 0
 let Swinging = false
+let Turret: Sprite = null
 let SwordFighter: Sprite = null
 let Gunner: Sprite = null
 let Sword: Sprite = null
@@ -715,5 +767,34 @@ game.onUpdate(function () {
     } else if (ThePlayer.vy < 0) {
         Sword.bottom = ThePlayer.top
         Sword.x = ThePlayer.x
+    }
+})
+game.onUpdateInterval(500, function () {
+    for (let value of sprites.allOfKind(SpriteKind.Turret1)) {
+        for (let value2 of sprites.allOfKind(SpriteKind.Enemy)) {
+            if (Math.abs(value.x - value2.x) <= 96 && Math.abs(value.y - value2.y) <= 96) {
+                TurretProjectile = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . f f f f . . . . . . 
+                    . . . . f f 4 b 2 4 f . . . . . 
+                    . . . f 4 4 b 4 f 2 4 f . . . . 
+                    . . . f 2 c b f f 2 4 f . . . . 
+                    . . . f 2 c c b 2 f 4 f . . . . 
+                    . . . f 4 b b 2 c f 4 f . . . . 
+                    . . . . f f b 2 c 2 f . . . . . 
+                    . . . . . f 4 b b f . . . . . . 
+                    . . . . . . f f f . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.TurretShoot)
+                TurretProjectile.setPosition(value.x, value.y)
+                TurretProjectile.follow(value2, 100)
+                TurretProjectile.lifespan = 500
+            }
+        }
     }
 })
