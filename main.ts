@@ -407,19 +407,19 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function Spawning (HP: number, speed: number) {
     spawn = tiles.getTilesByType(sprites.dungeon.stairNorth)
-    for (let index = 0; index < 1; index++) {
+    for (let index = 0; index < 2; index++) {
         BadGuy = sprites.create(BadGuys._pickRandom(), SpriteKind.Enemy)
         tiles.placeOnTile(BadGuy, tiles.getTileLocation(6, 0))
-    }
-    goal = scene.aStar(tiles.getTileLocation(6, 0), tiles.getTileLocation(34, 39))
-    scene.followPath(BadGuy, goal, speed)
-    EnemyBar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-    EnemyBar.attachToSprite(BadGuy)
-    EnemyBar.max = HP
-    EnemyBar.value = HP
-    if (info.score() == 10) {
-        EnemyBar.value += 2
-        BadGuy.setVelocity(speed + 20, speed + 20)
+        goal = scene.aStar(tiles.getTileLocation(6, 0), tiles.getTileLocation(34, 39))
+        scene.followPath(BadGuy, goal, speed)
+        EnemyBar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+        EnemyBar.attachToSprite(BadGuy)
+        EnemyBar.max = HP
+        EnemyBar.value = HP
+        if (HP == 950) {
+            goal2 = scene.aStar(tiles.getTileLocation(6, 0), tiles.getTileLocation(14, 39))
+            scene.followPath(BadGuy, goal2, speed)
+        }
     }
 }
 function Waves () {
@@ -427,27 +427,34 @@ function Waves () {
         game.splash("wave 1")
         for (let index = 0; index < 20; index++) {
             pause(500)
-            Spawning(1000, 50)
+            Spawning(850, 35)
         }
         timer.after(10000, function () {
             game.splash("wave 2")
             for (let index = 0; index < 50; index++) {
                 pause(500)
-                Spawning(1000, 50)
+                Spawning(randint(900, 950), 38)
             }
             timer.after(15000, function () {
                 game.splash("wave 3")
-                for (let index = 0; index < 2000; index++) {
+                for (let index = 0; index < 100; index++) {
                     pause(1000)
-                    Spawning(1000, 100)
+                    Spawning(randint(950, 1000), 40)
                 }
+                timer.after(15000, function () {
+                    game.splash("wave 4")
+                    for (let index = 0; index < 200; index++) {
+                        pause(1000)
+                        Spawning(1000, 45)
+                    }
+                })
             })
         })
     })
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite)
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -460
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -456,6 +463,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     statusbar.value += -2
 })
+let goal2: tiles.Location[] = []
 let EnemyBar: StatusBarSprite = null
 let goal: tiles.Location[] = []
 let BadGuy: Sprite = null
@@ -693,6 +701,7 @@ Sword = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.projectile2)
+let location = tiles.getTileLocation(34, 39)
 game.onUpdate(function () {
     if (ThePlayer.vx < 0) {
         Sword.right = ThePlayer.left
