@@ -296,11 +296,11 @@ function CharacterSelection () {
         `]
     FighterChoice = game.askForNumber("", 1)
     if (FighterChoice >= 3) {
-        game.splash("WRONG NUMBER")
+        game.splash("Wrong Number")
         game.gameOver(false)
     }
     if (FighterChoice == 0) {
-        game.splash("Nuh uh")
+        game.splash("Wrong Number")
         game.gameOver(false)
     }
 }
