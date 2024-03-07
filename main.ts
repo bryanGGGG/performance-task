@@ -24,8 +24,8 @@ scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
     sprites.destroy(sprite)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (info.score() >= 20) {
-        info.changeScoreBy(-20)
+    if (info.score() >= 15) {
+        info.changeScoreBy(-15)
         Turret = sprites.create(img`
             f f . . . . . . . . . . . . f f 
             f 8 f . . . . . . . . . . f 8 f 
@@ -458,7 +458,7 @@ function Spawning (HP: number, speed: number) {
     }
 }
 function Waves () {
-    game.showLongText("Press A button to attack, Press B button to purchase a turret that lasts 5 seconds and costs 20 score. Stop enemies from reaching their final destination", DialogLayout.Full)
+    game.showLongText("Press A button to attack, Press B button to purchase a turret that lasts 5 seconds and costs 15 score. Stop enemies from reaching their final destination", DialogLayout.Full)
     timer.after(1000, function () {
         game.splash("wave 1")
         for (let index = 0; index < 10; index++) {
