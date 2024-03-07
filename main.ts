@@ -55,24 +55,24 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         if (!(Swinging)) {
             Swinging = true
             Sword.setImage(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
+                . . . . . 1 1 1 1 1 . . . . . . 
                 `)
-            pause(10)
+            pause(20)
             Sword.setImage(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -341,9 +341,9 @@ function CharacterSelection () {
 }
 sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (attack == 1) {
-        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
     }
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -600
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -469,13 +469,13 @@ function Waves () {
             game.splash("wave 2")
             for (let index = 0; index < 25; index++) {
                 pause(500)
-                Spawning(randint(900, 950), 38)
+                Spawning(900, 38)
             }
             timer.after(15000, function () {
                 game.splash("wave 3")
                 for (let index = 0; index < 50; index++) {
                     pause(1000)
-                    Spawning(randint(950, 1000), 40)
+                    Spawning(randint(950, 955), 40)
                 }
                 timer.after(15000, function () {
                     game.splash("wave 4")
