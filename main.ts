@@ -8,9 +8,6 @@ namespace SpriteKind {
  * 
  * https://github.com/jwunderl/arcade-tilemap-a-star
  */
-/**
- * status bar and timer extension found in extensions tab in makecode arcade
- */
 function RemoveSprites () {
     sprites.destroy(Gunner)
     sprites.destroy(SwordFighter)
@@ -19,6 +16,9 @@ function RemoveSprites () {
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     shootdirection = 3
 })
+/**
+ * status bar and timer extension found in extensions tab in makecode arcade
+ */
 scene.onPathCompletion(SpriteKind.Enemy, function (sprite, location) {
     statusbar.value += -2
     sprites.destroy(sprite)
