@@ -45,7 +45,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             f f . . . . . . . . . . . . f f 
             `, SpriteKind.Turret1)
         Turret.setPosition(ThePlayer.x, ThePlayer.y)
-        Turret.lifespan = 5000
+        Turret.lifespan = 15000
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -343,7 +343,7 @@ sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, ot
     if (attack == 1) {
         statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
     }
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -300
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -200
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -458,7 +458,7 @@ function Spawning (HP: number, speed: number) {
     }
 }
 function Waves () {
-    game.showLongText("Press A button to attack, Press B button to purchase a turret that lasts 5 seconds and costs 15 score. Stop enemies from reaching their final destination", DialogLayout.Full)
+    game.showLongText("Press A button to attack, Press B button to purchase a turret that last 15 seconds and cost 15 score. Stop enemies from reaching their final destination", DialogLayout.Full)
     timer.after(1000, function () {
         game.splash("wave 1")
         for (let index = 0; index < 10; index++) {
@@ -497,7 +497,7 @@ function Waves () {
 }
 sprites.onOverlap(SpriteKind.TurretShoot, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite)
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -100
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -50
     if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value == 0) {
         info.changeScoreBy(1)
         sprites.destroy(otherSprite)
@@ -513,6 +513,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     statusbar.value += -2
+    pause(200)
 })
 let TurretProjectile: Sprite = null
 let goal2: tiles.Location[] = []
